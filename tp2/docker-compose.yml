@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:13 #    networks: [ internal ]
+    restart: unless-stopped
+    healthcheck:
+      {
+        test: [ "CMD-SHELL", "pg_isready -U mypguser" ],
+        interval: 10s,
+        timeout: 5s,
+        retries: 5
+      }
+    volumes:
+      - ".data/db:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_USER: mypguser
+      POSTGRES_PASSWORD: pypgpwd
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - 8085:80
