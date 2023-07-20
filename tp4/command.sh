@@ -6,3 +6,11 @@ kubectl apply -f reader-secret.yaml
 kubectl apply -f reader-cr.yaml
 # Create a ClusterRoleBinding
 kubectl apply -f reader-crb.yaml
+
+# Retreive token
+kubectl -n kube-system get secret reader-secret -o jsonpath='{.data.token}' | base64 --decode
+
+# change the value of token in kubeconfig-example.yaml
+
+# test
+kubectl get nodes --kubeconfig=kubeconfig-example.yaml

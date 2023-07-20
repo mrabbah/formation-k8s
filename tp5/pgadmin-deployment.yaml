@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    workload.user.cattle.io/workloadselector: apps.deployment-db-pgadmin-deployment
+  name: pgadmin-deployment
+  namespace: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      workload.user.cattle.io/workloadselector: apps.deployment-db-pgadmin-deployment
+  template:
+    metadata:
+      labels:
+        workload.user.cattle.io/workloadselector: apps.deployment-db-pgadmin-deployment
+    spec:
+      containers:
+      - env:
+        - name: PGADMIN_DEFAULT_EMAIL
+          valueFrom:
+            configMapKeyRef:
+              key: PGADMIN_DEFAULT_EMAIL
+              name: pgadmin-cm
+        - name: PGADMIN_DEFAULT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: PGADMIN_DEFAULT_PASSWORD
+              name: pgadmin-secret
+        image: dpage/pgadmin4:latest
+        imagePullPolicy: IfNotPresent
+        name: pgadmin-container
+        resources: 
+          limits:
+            cpu: 100m
+            memory: 100Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
