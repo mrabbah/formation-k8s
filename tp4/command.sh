@@ -14,3 +14,9 @@ kubectl -n kube-system get secret reader-secret -o jsonpath='{.data.token}' | ba
 
 # test
 kubectl get nodes --kubeconfig=kubeconfig-example.yaml
+
+kubectl get ns --kubeconfig=kubeconfig-example.yaml
+
+cd ../tp5
+
+kubectl apply -f pgadmin-deployment.yaml --kubeconfig=../tp4/kubeconfig-example.yaml
